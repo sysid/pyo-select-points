@@ -1,0 +1,44 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+ipykernel = "*"
+matplotlib = "*"
+nbformat = "*"
+numpy = "*"
+ortools = "*"
+pandas = "*"
+plotly = "*"
+pqdm = "*"
+pyomo = {extras = ["optional"], version = "*"}
+appdirs = "*"
+pydantic = {extras = ["dotenv"], version = "*"}  # required by environment.py
+typer = "*"
+pyyaml = "*"
+rich = "*"
+sqlalchemy = "*"
+jupyter = "*"
+
+[dev-packages]
+black = "*"
+coverage = "*"
+build = "*"
+bump2version = "*"
+flake8 = "*"
+flake8-bugbear = "*"
+ipython = "*"
+isort = "*"
+mypy = "*"
+pre-commit = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+#pytest-freezegun = "*"  # time freezer
+#sphinx = "*"
+#sphinx-rtd-theme = "*"
+
+[requires]
+python_version = "3.11"
+python_full_version = "3.11.3"
