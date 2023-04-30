@@ -20,6 +20,8 @@ pyyaml = "*"
 rich = "*"
 sqlalchemy = "*"
 jupyter = "*"
+dill = "*"
+#twimage = {editable = true,path = "../py-image/twimage"}
 
 [dev-packages]
 black = "*"
