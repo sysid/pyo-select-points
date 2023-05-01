@@ -121,6 +121,7 @@ if __name__ == '__main__':
     logging.basicConfig(format=log_fmt, level=logging.DEBUG)
     logging.getLogger('matplotlib').setLevel(logging.INFO)
 
-    name = 'test'
-    ok = Ok(config=getattr(settings, name))
-    pprint(ok.ok)
+    # name = 'test'
+    # ok = Ok(config=getattr(settings, name))
+    # pprint(ok.ok)
+    plot_points(config=getattr(settings, 'test'))

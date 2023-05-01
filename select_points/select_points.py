@@ -63,6 +63,14 @@ class SelectPoints(BaseModel):
         def both_selected(m, i, j):
             return m.pair[i, j] >= m.x[i] + m.x[j] - 1
 
+        @m.Constraint(m.Ok)
+        def y_less_i(m, i, j):
+            return m.pair[i, j] <= m.x[i]
+
+        @m.Constraint(m.Ok)
+        def y_less_j(m, i, j):
+            return m.pair[i, j] <= m.x[j]
+
         ################################################################################
         # Objective
         ################################################################################
@@ -70,7 +78,6 @@ class SelectPoints(BaseModel):
         def total_distance(m):
             return sum(
                 m.pair[i, j] * m.distance[i, j] for (i, j) in m.Ok)
-
 
     def show(self):
         if self.is_solved:
@@ -86,7 +93,7 @@ if __name__ == "__main__":
     logging.getLogger('matplotlib').setLevel(logging.INFO)
     print(f"{'select-points':.^80}")
 
-    name = 'full2'
+    name = 'test'
     config = getattr(settings, name)
     # config = generate_test_data(100, 10)
 

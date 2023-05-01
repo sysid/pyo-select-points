@@ -24,7 +24,7 @@ def save_to_db(logdata: Dict):
 
 class BaseModel(object):
     SOLVER_NAME = 'cbc'
-    TIME_LIMIT = 600
+    TIME_LIMIT = 6000
 
     if SOLVER_NAME == 'cplex':
         solver = SolverFactory("cplex", executable='~/dev/cplex/opt/cplex/bin/x86-64_linux/cplex')
@@ -42,7 +42,7 @@ class BaseModel(object):
     elif SOLVER_NAME == 'cbc':
         # solver = SolverFactory("cbc", io_format='nl')  # python, nl, not setting
         solver = SolverFactory(SOLVER_NAME)
-        solver.options["threads"] = 6
+        solver.options["threads"] = 8
         # https://stackoverflow.com/questions/60595491/how-you-enable-cbc-to-return-best-solution-when-timelimit-pyomo
         # echo "verbose 15 ?"|cbc > cbc.out
         solver.options['seconds'] = TIME_LIMIT

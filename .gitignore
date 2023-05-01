@@ -1,3 +1,5 @@
+*.dump
+*.dill
 env.pycharm
 test.*.dump
 test.dill

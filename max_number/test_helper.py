@@ -1,4 +1,5 @@
 import logging
+import os
 from pprint import pprint
 
 import pytest
@@ -36,3 +37,8 @@ def test_generate_test_data():
     test = generate_test_data(N, G)
     pprint(test)
     _ = None
+
+
+def test_print_environment_variables():
+    for key, value in os.environ.items():
+        print(f"{key}: {value}")
