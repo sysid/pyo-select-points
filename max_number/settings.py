@@ -1,6 +1,7 @@
 from helper import plot_points
 
 test = {
+    'dist': 50,
     'points': {
         1: (66.111, 75.582),
         2: (62.745, 28.386),
@@ -16,6 +17,7 @@ test = {
 }
 
 full = {
+    'dist': 50,
     'points': {
         1: (17.175, 84.327),
         2: (55.038, 30.114),

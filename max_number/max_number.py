@@ -7,7 +7,7 @@ import pyomo.environ as pyo
 
 import settings
 from common.BaseModel import BaseModel
-from helper import Ok, group, plot_points, generate_test_data
+from helper import plot_points, create_ok
 
 _log = logging.getLogger(__name__)
 
@@ -26,25 +26,22 @@ class MaxNumberMinDistance(BaseModel):
         self.config = config
         m = self.instance  # from BaseModel
         self.points = config['points']
-        self.group_membership = config['group_membership']
+        self.min_distance = config['dist']
 
         ################################################################################
         # Sets
         ################################################################################
-        m.I = pyo.RangeSet(config['N'])
-        m.G = pyo.RangeSet(config['G'])
-        m.Ok = pyo.Set(initialize=Ok(config).ok)
+        m.I = pyo.RangeSet(len(config['points']))
+        m.Ok = pyo.Set(initialize=create_ok(config))
 
         ################################################################################
         # Params put at model
         ################################################################################
         @m.Param(m.Ok)
-        def distance(model, i, j):
+        def distance(m, i, j):
             p = Point(*self.points[i])
             q = Point(*self.points[j])
             return sqrt((p.x - q.x) ** 2 + (p.y - q.y) ** 2)
-
-        m.groups = pyo.Param(m.G, initialize=group(config))
 
         ################################################################################
         # Var
@@ -55,10 +52,6 @@ class MaxNumberMinDistance(BaseModel):
         ################################################################################
         # Constraints
         ################################################################################
-        @m.Constraint(m.G)
-        def one_point_per_group(m, g):
-            return sum(m.x[i] for i in m.groups[g]) == 1
-
         @m.Constraint(m.Ok)
         def both_selected(m, i, j):
             return m.pair[i, j] >= m.x[i] + m.x[j] - 1
@@ -71,18 +64,22 @@ class MaxNumberMinDistance(BaseModel):
         def y_less_j(m, i, j):
             return m.pair[i, j] <= m.x[j]
 
+        @m.Constraint(m.Ok)
+        def distance_greater_than(m, i, j):
+            return m.distance[i, j] >= m.pair[i, j] * self.min_distance
+
         ################################################################################
         # Objective
         ################################################################################
         @m.Objective(sense=pyo.maximize)
-        def total_distance(m):
+        def max_number(m):
             return sum(
                 m.pair[i, j] * m.distance[i, j] for (i, j) in m.Ok)
 
     def show(self):
         if self.is_solved:
             pprint(self.result)
-            plot_points(config, m.result)
+            plot_points(config, self.result)
         else:
             _log.warning(f"Model not solved optimally.")
 
@@ -93,11 +90,11 @@ if __name__ == "__main__":
     logging.getLogger('matplotlib').setLevel(logging.INFO)
     print(f"{'select-points':.^80}")
 
-    name = 'full2'
+    name = 'full'
     config = getattr(settings, name)
     # config = generate_test_data(100, 10)
 
-    m = SelectPoints(name=name, config=config)
+    m = MaxNumberMinDistance(name=name, config=config)
     m.save_model()
     m.solve(tee=False, keepfiles=False)
     m.save_model()

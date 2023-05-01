@@ -39,7 +39,7 @@ class SelectPoints(BaseModel):
         # Params put at model
         ################################################################################
         @m.Param(m.Ok)
-        def distance(model, i, j):
+        def distance(m, i, j):
             p = Point(*self.points[i])
             q = Point(*self.points[j])
             return sqrt((p.x - q.x) ** 2 + (p.y - q.y) ** 2)

@@ -1,3 +1,4 @@
+logdata.db
 *.dump
 *.dill
 env.pycharm

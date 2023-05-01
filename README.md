@@ -1,4 +1,5 @@
 # pyo-select-points
+Various Pyomo models to solve point related problems.
 
 ## Select points
 
