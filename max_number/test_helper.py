@@ -5,7 +5,7 @@ from pprint import pprint
 import pytest
 
 import settings
-from helper import plot_points, create_ok
+from helper import plot_points, create_ok, generate_test_data
 
 log_fmt = r"%(asctime)-15s %(levelname)s %(name)s %(funcName)s:%(lineno)d %(message)s"
 logging.basicConfig(format=log_fmt, level=logging.DEBUG)
@@ -22,6 +22,6 @@ def test_ok():
     _ = None
 
 
-def test_print_environment_variables():
-    for key, value in os.environ.items():
-        print(f"{key}: {value}")
+def test_generate_test_data():
+    data = generate_test_data(200, 50)
+    _ = None
