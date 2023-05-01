@@ -1,16 +1,13 @@
-#!/usr/bin/env python
-import sys
 import logging
 from dataclasses import dataclass
 from math import sqrt
 from pprint import pprint
-import numpy as np
 
 import pyomo.environ as pyo
 
 import settings
 from common.BaseModel import BaseModel
-from helper import Ok, group, plot_points
+from helper import Ok, group, plot_points, generate_test_data
 
 _log = logging.getLogger(__name__)
 
@@ -41,8 +38,6 @@ class SelectPoints(BaseModel):
         ################################################################################
         # Params put at model
         ################################################################################
-        m.Points = pyo.Set(initialize=self.points.values())
-
         @m.Param(m.Ok)
         def distance(model, i, j):
             p = Point(*self.points[i])
@@ -71,11 +66,11 @@ class SelectPoints(BaseModel):
         ################################################################################
         # Objective
         ################################################################################
-        def total_distance_rule(m):
+        @m.Objective(sense=pyo.minimize)
+        def total_distance(m):
             return sum(
                 m.pair[i, j] * m.distance[i, j] for (i, j) in m.Ok)
 
-        m.objective = pyo.Objective(rule=total_distance_rule, sense=pyo.minimize)
 
     def show(self):
         if self.is_solved:
@@ -91,8 +86,9 @@ if __name__ == "__main__":
     logging.getLogger('matplotlib').setLevel(logging.INFO)
     print(f"{'select-points':.^80}")
 
-    name = 'full'
+    name = 'full2'
     config = getattr(settings, name)
+    # config = generate_test_data(100, 10)
 
     m = SelectPoints(name=name, config=config)
     m.save_model()

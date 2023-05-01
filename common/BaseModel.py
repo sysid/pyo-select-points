@@ -8,7 +8,7 @@ from pprint import pprint
 from typing import Iterable, Any, Dict
 
 import dill
-from pyomo.core import value, Var, ConcreteModel
+from pyomo.core import value, Var, ConcreteModel, base
 from pyomo.opt import SolverStatus, TerminationCondition, SolverFactory
 
 from common.database import SessionLocal, Logdata
@@ -23,7 +23,6 @@ def save_to_db(logdata: Dict):
 
 
 class BaseModel(object):
-
     SOLVER_NAME = 'cbc'
     TIME_LIMIT = 600
 
@@ -52,14 +51,13 @@ class BaseModel(object):
         solver.options['maxSolutions'] = -1  # -1 - 2147483647, 3: resulted in aborted solvable models
 
     elif SOLVER_NAME == 'ipopt':
-        executable = os.getcwd()+'/Ipopt/Ipopt/build/bin/ipopt.exe'
-        solver = SolverFactory("ipopt", executable=executable,solver_io='nl')
+        executable = os.getcwd() + '/Ipopt/Ipopt/build/bin/ipopt.exe'
+        solver = SolverFactory("ipopt", executable=executable, solver_io='nl')
         solver.options['nlp_scaling_method'] = 'user-scaling'
         solver.options['max_iter'] = 10  # ipopt --print-options
 
     else:
         raise NotImplementedError(f"Solver not availabe: {SOLVER_NAME}")
-
 
     def __init__(self, name: str) -> None:
 
@@ -101,7 +99,11 @@ class BaseModel(object):
         start_time = time.time()
 
         self.solver_result = self.solver.solve(self.instance, tee=tee, **kwargs)
-        self.objective = value(self.instance.objective)
+        # pull out objective (can have arbitrary name, not only 'objective'
+        # self.objective = value(self.instance.objective)
+        [obj, ] = [obj for obj in self.instance.active_components() if
+                   isinstance(obj, base.objective.ScalarObjective)]
+        self.objective = value(obj)
 
         # self.instance.display()
         self.show_result(self.solver_result)
@@ -147,7 +149,7 @@ class BaseModel(object):
 
     def show_result(self, result):
         if (result.solver.status == SolverStatus.ok) and (
-                result.solver.termination_condition == TerminationCondition.optimal
+            result.solver.termination_condition == TerminationCondition.optimal
         ):
             _log.info("# feasible and optimal solution found")
             self.is_solved = True
@@ -155,7 +157,7 @@ class BaseModel(object):
                 [result.Problem.get("Lower bound").value, result.Problem.get("Upper bound").value, ]
             ))
         elif (result.solver.status == SolverStatus.ok) and (
-                result.solver.termination_condition == TerminationCondition.maxTimeLimit
+            result.solver.termination_condition == TerminationCondition.maxTimeLimit
         ):
             _log.info(f"# {result.solver.termination_message}.")
             self.is_solved = True

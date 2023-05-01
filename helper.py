@@ -80,6 +80,42 @@ def group(config: Dict) -> Dict:
     return groups
 
 
+import random
+
+import random
+
+
+def generate_test_data(N, G):
+    if N < G:
+        raise ValueError("Number of points (N) must be greater than or equal to the number of groups (G)")
+
+    points = {}
+    group_membership = []
+
+    for i in range(1, N + 1):
+        x = round(random.uniform(0, 100), 3)
+        y = round(random.uniform(0, 100), 3)
+        points[i] = (x, y)
+
+    # Assign one point to each group
+    for i in range(1, G + 1):
+        group_membership.append((i, i))
+
+    # Randomly assign the remaining points to the groups
+    for i in range(G + 1, N + 1):
+        group = random.randint(1, G)
+        group_membership.append((i, group))
+
+    test = {
+        'N': N,
+        'G': G,
+        'points': points,
+        'group_membership': group_membership
+    }
+
+    return test
+
+
 if __name__ == '__main__':
     log_fmt = r'%(asctime)-15s %(levelname)s %(name)s %(funcName)s:%(lineno)d %(message)s'
     logging.basicConfig(format=log_fmt, level=logging.DEBUG)

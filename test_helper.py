@@ -1,8 +1,10 @@
 import logging
+from pprint import pprint
+
 import pytest
 
 import settings
-from helper import Ok, plot_points, group
+from helper import Ok, plot_points, group, generate_test_data
 
 log_fmt = r"%(asctime)-15s %(levelname)s %(name)s %(funcName)s:%(lineno)d %(message)s"
 logging.basicConfig(format=log_fmt, level=logging.DEBUG)
@@ -18,10 +20,19 @@ def test_ok():
 
 
 def test_plot_points():
-    plot_points(config=getattr(settings, 'test'))
+    plot_points(config=getattr(settings, 'full2'))
 
 
 def test_group():
     groups = group(config=getattr(settings, 'test'))
     assert groups.get(3) == [2, 3]
+    _ = None
+
+
+def test_generate_test_data():
+    # Example usage:
+    N = 100
+    G = 10
+    test = generate_test_data(N, G)
+    pprint(test)
     _ = None

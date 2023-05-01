@@ -1,7 +1,0 @@
-# stop it
-tail -f /tmp/tmpuygsr738.cplex.log
-kill -SIGSTOP 11159
-
-
-# continue
-kill -CONT 22965
