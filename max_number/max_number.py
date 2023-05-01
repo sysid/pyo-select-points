@@ -47,34 +47,20 @@ class MaxNumberMinDistance(BaseModel):
         # Var
         ################################################################################
         m.x = pyo.Var(m.I, domain=pyo.Binary, initialize=0)
-        m.pair = pyo.Var(m.Ok, domain=pyo.Binary, initialize=0)
 
         ################################################################################
         # Constraints
         ################################################################################
         @m.Constraint(m.Ok)
-        def both_selected(m, i, j):
-            return m.pair[i, j] >= m.x[i] + m.x[j] - 1
-
-        @m.Constraint(m.Ok)
-        def y_less_i(m, i, j):
-            return m.pair[i, j] <= m.x[i]
-
-        @m.Constraint(m.Ok)
-        def y_less_j(m, i, j):
-            return m.pair[i, j] <= m.x[j]
-
-        @m.Constraint(m.Ok)
         def distance_greater_than(m, i, j):
-            return m.distance[i, j] >= m.pair[i, j] * self.min_distance
+            return m.distance[i, j] >= self.min_distance * (m.x[i] + m.x[j] - 1)
 
         ################################################################################
         # Objective
         ################################################################################
         @m.Objective(sense=pyo.maximize)
         def max_number(m):
-            return sum(
-                m.pair[i, j] * m.distance[i, j] for (i, j) in m.Ok)
+            return sum(m.x[i] for i in m.I)
 
     def show(self):
         if self.is_solved:
