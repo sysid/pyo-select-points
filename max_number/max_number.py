@@ -73,8 +73,7 @@ class MaxNumberMinDistance(BaseModel):
         ################################################################################
         @m.Objective(sense=pyo.maximize)
         def max_number(m):
-            return sum(
-                m.pair[i, j] * m.distance[i, j] for (i, j) in m.Ok)
+            return sum(m.x[i] for i in m.I)
 
     def show(self):
         if self.is_solved:
