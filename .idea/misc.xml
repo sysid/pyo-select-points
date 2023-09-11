@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="Black">
+    <option name="enabledOnReformat" value="true" />
+    <option name="pathToExecutable" value="$PROJECT_DIR$/../../private/learn-chatgpt/.venv/bin/black" />
+    <option name="sdkUUID" value="44a8fc60-80ac-4733-a34e-8e47bb079c2e" />
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (pyo-select-points) (2)" project-jdk-type="Python SDK" />
 </project>
