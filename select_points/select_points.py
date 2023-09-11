@@ -93,6 +93,7 @@ if __name__ == "__main__":
     logging.getLogger('matplotlib').setLevel(logging.INFO)
     print(f"{'select-points':.^80}")
 
+    # name = 'full2'
     name = 'test'
     config = getattr(settings, name)
     # config = generate_test_data(100, 10)
