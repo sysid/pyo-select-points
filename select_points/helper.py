@@ -196,7 +196,7 @@ if __name__ == "__main__":
 
     name = "test"
     ok = Ok(config=getattr(settings, name))
-    # pprint(ok.ok)
+    pprint(ok.ok)
     plot_points(config=getattr(settings, name))
     # plot_points_with_edges(config=getattr(settings, name), ok_object=ok)
     print(f"count total: {len(ok.ok)}")
